@@ -1,0 +1,14 @@
+[
+    {
+        "nombre": "admin",
+        "apellido": "admin",
+        "cedula": "1754781860",
+        "estado": "vacunado",
+        "usuario": "admin",
+        "email": "admin@admin.com",
+        "rol": "administrador",
+        "contraseña": "admin",
+        "vacuna": "",
+        "dosis": []
+    }
+]

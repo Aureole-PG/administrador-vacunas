@@ -1,0 +1,16 @@
+.windows-heigth {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.center-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.layout-content {
+  height: 100%;
+  overflow-y: auto;
+}
