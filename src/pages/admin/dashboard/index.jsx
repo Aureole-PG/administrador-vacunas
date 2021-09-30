@@ -3,21 +3,27 @@ import { Row, Col, Select, DatePicker, Switch, Space, Radio } from "antd";
 // import data from "../../../utils/empleados.json";
 import { UsersTable } from "./table";
 import { getUsers } from "../../../store/users";
+import moment from "moment";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const Dasboard = () => {
   const [loading, setLoading] = useState(true);
   const [allUsers, setAllUsers] = useState([]);
   const [filterData, setFilterData] = useState([]);
+  const [auxFilter, setAuxFilter] = useState([]);
   const [filter, setFilter] = useState(false);
   const [estado, setEstado] = useState("todos");
+  const [dateValue, setDateValue] = useState(null);
   const handleChange = (value) => {
     const vacunados = allUsers.filter((e) => e.estado === "vacunado");
+    setDateValue(null);
     if (value !== "todos") {
       const newfilter = vacunados.filter((e) => e.vacuna === value);
+      setAuxFilter([...newfilter]);
       setFilterData([...newfilter]);
     } else {
       setFilterData([...vacunados]);
+      setAuxFilter([...vacunados]);
     }
   };
   const onChangeState = (e) => {
@@ -26,10 +32,20 @@ const Dasboard = () => {
     setFilterData([...allUsers]);
     if (estado !== "todos") {
       setFilterData(allUsers.filter((e) => e.estado === estado));
+      setAuxFilter(allUsers.filter((e) => e.estado === estado));
     }
   };
   const onDateChange = (e) => {
-    console.log(e[0].format("DD-mm-yyyy"));
+    setDateValue(e);
+    if (e === null) {
+      setFilterData(auxFilter);
+    } else {
+      const datefilter = auxFilter.filter(
+        (data) =>
+          moment(data.fecha_dosis) >= e[0] && moment(data.fecha_dosis) <= e[1]
+      );
+      setFilterData([...datefilter]);
+    }
   };
   useEffect(() => {
     let data = getUsers();
@@ -86,7 +102,12 @@ const Dasboard = () => {
               </Col>
               <Col>
                 <label>Rango de fechas </label>
-                <RangePicker onChange={onDateChange} picker="week" />
+                <RangePicker
+                  format={"DD-MM-yyyy"}
+                  value={dateValue}
+                  onChange={onDateChange}
+                  picker="week"
+                />
               </Col>
             </>
           )}

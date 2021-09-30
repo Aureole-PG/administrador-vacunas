@@ -1,21 +1,21 @@
 import { createContext, useCallback, useState } from "react";
-import { findUser } from "../store/auth";
-import { useHistory } from "react-router";
+import { findUserLogin } from "../store/auth";
+import { findUser } from "../store/users";
 export const AuthContext = createContext();
 
 const initialState = {
   nombre: null,
   email: null,
+  cedula: null,
   logged: false,
   rol: null,
+  user: null,
 };
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(initialState);
-  const history = useHistory();
   const login = async (usuario, password) => {
-    const user = await findUser(usuario, password);
-    console.log(user);
+    const user = await findUserLogin(usuario, password);
     if (!user) return false;
     localStorage.setItem(
       "logged",
@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
         cedula: user.cedula,
         logged: true,
         rol: user.rol,
+        user: user,
       })
     );
     setAuth({
@@ -33,24 +34,31 @@ export const AuthProvider = ({ children }) => {
       cedula: user.cedula,
       logged: true,
       rol: user.rol,
+      user: user,
+    });
+  };
+  const UpdateData = async () => {
+    const user = await findUser(auth.cedula);
+    setAuth({
+      ...auth,
+      user: user,
     });
   };
   const verificaToken = useCallback(async () => {
     const user = localStorage.getItem("logged");
     if (!user) {
-      console.log("no existe");
       setAuth({
         nombre: null,
         email: null,
         logged: false,
         cedula: null,
         rol: null,
+        user: null,
       });
 
       return false;
     }
     const userObj = JSON.parse(user);
-    console.log(userObj);
     setAuth(userObj);
   }, []);
   const logout = () => {
@@ -67,6 +75,7 @@ export const AuthProvider = ({ children }) => {
         login,
         verificaToken,
         logout,
+        UpdateData,
       }}
     >
       {children}

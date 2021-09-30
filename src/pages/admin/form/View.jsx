@@ -3,6 +3,7 @@ import { UserForm } from "./Form";
 import { Col, Row, Descriptions, Button, Space } from "antd";
 import { useHistory } from "react-router";
 import { deleteUser, updateUser } from "../../../store/users";
+import moment from "moment";
 const Create = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -52,6 +53,17 @@ const Create = () => {
               <Descriptions.Item label="Cedula">
                 {userData.cedula}
               </Descriptions.Item>
+              <Descriptions.Item label="Telefono">
+                {userData.telefono ?? ""}
+              </Descriptions.Item>
+              <Descriptions.Item label="Direccion">
+                {userData.direccion ?? ""}
+              </Descriptions.Item>
+              <Descriptions.Item label="Fecha de nacimiento">
+                {userData.fecha_nacimiento
+                  ? moment(userData.fecha_nacimiento).format("DD-mm-yyyy")
+                  : ""}
+              </Descriptions.Item>
               <Descriptions.Item label="Usuario">
                 {userData.usuario}
               </Descriptions.Item>
@@ -61,17 +73,18 @@ const Create = () => {
               <Descriptions.Item label="Estado">
                 {userData.estado}
               </Descriptions.Item>
+
               {userData.estado == "vacunado" && (
                 <>
                   <Descriptions.Item label="Vacuna">
                     {userData.vacuna}
                   </Descriptions.Item>
-                  {userData.dosis.map((e, i) => (
-                    <Descriptions.Item key={i} label="Dosis">
-                      <p>Dosis: {e.num}</p>
-                      <p>Fecha: {e.fecha}</p>
-                    </Descriptions.Item>
-                  ))}
+                  <Descriptions.Item label="Dosis">
+                    <p>Dosis: {userData.dosis}</p>
+                    <p>
+                      Fecha: {moment(userData.fecha_dosis).format("DD-mm-yyyy")}
+                    </p>
+                  </Descriptions.Item>
                 </>
               )}
             </Descriptions>

@@ -1,10 +1,14 @@
-import { useContext } from "react";
-import { Form, Input, Button } from "antd";
+import { useContext, useState, useEffect } from "react";
+import { Form, Input, Button, Alert, Row, Col } from "antd";
 import { AuthContext } from "../../auth/AuthContext";
 export const Login = () => {
   const { login } = useContext(AuthContext);
-  const onFinish = (values) => {
-    login(values.usuario, values.contraseña);
+  const [error, setError] = useState(false);
+  const onFinish = async (values) => {
+    const response = await login(values.usuario, values.contraseña);
+    if (response === false) {
+      setError(true);
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -64,6 +68,18 @@ export const Login = () => {
           </Button>
         </Form.Item>
       </Form>
+      {error && (
+        <Row>
+          <Col>
+            <Alert
+              style={{ marginInline: 10 }}
+              message="Error"
+              description="Usuario o contraseña incorrecto"
+              type="error"
+            />
+          </Col>
+        </Row>
+      )}
     </div>
   );
 };

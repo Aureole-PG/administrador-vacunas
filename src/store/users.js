@@ -7,7 +7,6 @@ else{
 }
 export const AddNewUser = (user) =>{
     const state = data.filter(e=> e.cedula === user.cedula ||  e.usuario=== user.usuario)
-    console.log(state)
     if(state.length!==0) return false
     const newUser = [
         ...data, user
@@ -46,6 +45,23 @@ export const updateUser=(value, CI)=>{
                 e.nombre = value.nombre
                 e.apellido = value.apellido
                 e.email = value.email
+            }
+            return e
+    })
+    localStorage.setItem('users',JSON.stringify(data))
+    return true    
+    } catch (error) {
+        return false
+    }
+    
+}
+export const updateUser_=(value, CI)=>{
+    try {
+    data = data.map(e=>{
+        if (e.cedula === CI) {
+                Object.keys(value).map(keys=>{
+                    e[keys] = value[keys]
+                })
             }
             return e
     })

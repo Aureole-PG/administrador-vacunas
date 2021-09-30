@@ -1,6 +1,7 @@
-import { Table, Tag, Button, Tooltip } from "antd";
+import { Table, Tag, Button, Typography } from "antd";
+const { Paragraph } = Typography;
 import { useHistory } from "react-router-dom";
-
+import moment from "moment";
 export const UsersTable = ({ data }) => {
   const history = useHistory();
   const columns = [
@@ -8,20 +9,20 @@ export const UsersTable = ({ data }) => {
       title: "Nombre",
       dataIndex: "nombre",
       key: "name",
-      width: 15,
+      align: "left",
+      width: 50,
       fixed: "left",
       render: (text, record) => (
-        <Tooltip title="Ver Usuario">
-          <Button
-            type="link"
-            onClick={() =>
-              history.push(`/route/edit/${record.cedula}`, { record })
-            }
-            block
-          >
-            {`${record.nombre} ${record.apellido}`}
-          </Button>
-        </Tooltip>
+        // <Tooltip title="Ver Usuario">
+        <Button
+          type="link"
+          onClick={() =>
+            history.push(`/route/edit/${record.cedula}`, { record })
+          }
+        >
+          {`${record.nombre} ${record.apellido}`}
+        </Button>
+        // </Tooltip>
       ),
     },
     {
@@ -40,21 +41,18 @@ export const UsersTable = ({ data }) => {
     {
       title: "Vacuna",
       key: "vacuna",
-      width: 20,
+      width: 30,
       dataIndex: "vacuna",
       render: (vacuna, record) => (
         <>
           <h5>{vacuna ?? ""}</h5>
-
-          {record.dosis.map((dosis) => {
-            return (
-              <Tag color={"geekblue"} key={dosis.num}>
-                {`Dosis: ${dosis.num}`}
-                <br />
-                {`Fecha: ${dosis.fecha}`}
-              </Tag>
-            );
-          })}
+          {record.estado == "vacunado" && (
+            <Tag color={"geekblue"}>
+              {`Dosis: ${record.dosis}`}
+              <br />
+              {`Fecha: ${moment(record.fecha_dosis).format("DD/mm/yyyy")}`}
+            </Tag>
+          )}
         </>
       ),
     },

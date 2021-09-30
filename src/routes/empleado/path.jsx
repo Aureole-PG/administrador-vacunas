@@ -5,14 +5,9 @@ export const paths = [
     exact: true,
     component: lazy(() => import("../../pages/empleado")),
   },
-  // {
-  //   path: "create",
-  //   exact: true,
-  //   component: lazy(() => import("../../pages/admin/form/Create")),
-  // },
-  // {
-  //   path: "edit/:CI",
-  //   exact: true,
-  //   component: lazy(() => import("../../pages/admin/form/View")),
-  // },
+  {
+    path: "update",
+    exact: true,
+    component: lazy(() => import("../../pages/empleado/Form")),
+  },
 ];
